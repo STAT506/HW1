@@ -1,0 +1,56 @@
+---
+title: "HW1"
+author: ""
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(tidyverse)
+```
+# HW1
+### Q1. (4 points)
+Recall that a Poisson (or NB) has the following relationship between the mean and covariates:
+
+\begin{align}
+  y_i & \sim Poisson(\mu_i)\\
+  \log(\mu_i) & = X_i \beta
+\end{align}
+
+Assess the model fit between casual user bike rentals and centered temperature and determine if transformations of centered temperature would result in a better fit. Defend your choice.
+
+```{r, message = F}
+bikes <- read_csv("https://raw.githubusercontent.com/STAT506/GLM_Lectures/main/daily_bike.csv")
+bikes <- bikes %>% mutate(temp_centered = temp - mean(temp))
+```
+
+\vfill
+
+```{r, echo = F}
+bikes %>% ggplot(aes(y = casual, x = temp)) + geom_point(alpha = .5) + theme_bw() +
+  ggtitle("Casual User Bike Rentals vs Centered Temperature") +
+  xlab('Centered Temperature') + ylab('daily rentals') +
+  geom_smooth(formula = 'y~x', method = 'loess', se = F)
+```
+
+\newpage
+
+### Q2. 
+
+#### a. (4 points)
+
+Write an R function or chunk of code to simulate data from a negative binomial regression model using a single covariate and a user specified value of $\phi$.
+
+#### b. (4 points)
+
+Use the following four values of $\phi:$ {.1, 1, 50, 1000} and simulate a dataset. Create a paneled figure that shows y and x for each scenario.
+
+#### c. (4 points)
+Use `stan_glm()` to fit Poisson models and Negative Binomial models for each of the four simulated datasets. Create a table or figure that contains the intercept and slope coefficient for each outcome. Then comment on the implications of your results.
+
+#### c. (4 points)
+Use `stan_glm()` to fit Poisson models and Negative Binomial models for each of the four simulated datasets. Create a table or figure that contains the intercept and slope coefficient for each outcome. Then comment on the implications of your results.
+
+#### d. (5 points)
+
+Use `posterior_predict()` and posterior predictive checks to further interrogate the model fit (using the Poisson models)
